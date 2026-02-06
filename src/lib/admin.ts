@@ -5,7 +5,7 @@ const ADMIN_COOKIE = "suggestion_admin";
 const COOKIE_MAX_AGE = 60 * 60 * 24; // 24時間
 
 function getExpectedToken(): string | null {
-  const secret = process.env.ADMIN_PASSWORD;
+  const secret = process.env.ADMIN_PASSWORD?.trim();
   if (!secret) return null;
   return createHash("sha256")
     .update(secret + "suggestion_admin_salt")
@@ -13,9 +13,9 @@ function getExpectedToken(): string | null {
 }
 
 export async function verifyAdminPassword(password: string): Promise<boolean> {
-  const expected = process.env.ADMIN_PASSWORD;
+  const expected = process.env.ADMIN_PASSWORD?.trim();
   if (!expected) return false;
-  return password === expected;
+  return password.trim() === expected;
 }
 
 export async function setAdminSession(): Promise<void> {

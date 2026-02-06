@@ -14,6 +14,7 @@ export type Suggestion = {
   id: string;
   content: string;
   author_name: string | null;
+  category?: string | null;
   status?: string;
   admin_response?: string | null;
   admin_responded_at?: string | null;
@@ -25,6 +26,7 @@ export type Suggestion = {
 export async function createSuggestion(formData: FormData) {
   const content = formData.get("content") as string;
   const authorName = (formData.get("author_name") as string) || null;
+  const category = (formData.get("category") as string) || "other";
 
   if (!content?.trim()) {
     return { error: "ご意見を入力してください。" };
@@ -35,6 +37,7 @@ export async function createSuggestion(formData: FormData) {
     const { error } = await supabase.from("suggestions").insert({
       content: content.trim(),
       author_name: authorName?.trim() || null,
+      category: category || "other",
     });
 
     if (error) throw error;
@@ -52,7 +55,7 @@ export async function getSuggestions(): Promise<Suggestion[]> {
     const supabase = createServerClient();
     const { data, error } = await supabase
       .from("suggestions")
-      .select("id, content, author_name, status, admin_response, admin_responded_at, created_at")
+      .select("id, content, author_name, category, status, admin_response, admin_responded_at, created_at")
       .order("created_at", { ascending: false });
 
     if (error) throw error;
@@ -138,7 +141,7 @@ export async function getAdminSuggestions(): Promise<Suggestion[]> {
     const supabase = createAdminClient();
     const { data, error } = await supabase
       .from("suggestions")
-      .select("id, content, author_name, status, admin_response, admin_responded_at, created_at")
+      .select("id, content, author_name, category, status, admin_response, admin_responded_at, created_at")
       .order("created_at", { ascending: false });
 
     if (error) throw error;

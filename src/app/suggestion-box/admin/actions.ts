@@ -9,6 +9,7 @@ export type Suggestion = {
   id: string;
   content: string;
   author_name: string | null;
+  category?: string | null;
   status?: string;
   admin_response?: string | null;
   admin_responded_at?: string | null;
@@ -34,7 +35,7 @@ export async function getAdminSuggestions(): Promise<Suggestion[]> {
     const supabase = createAdminClient();
     const { data, error } = await supabase
       .from("suggestions")
-      .select("id, content, author_name, status, admin_response, admin_responded_at, created_at")
+      .select("id, content, author_name, category, status, admin_response, admin_responded_at, created_at")
       .order("created_at", { ascending: false });
 
     if (error) throw error;

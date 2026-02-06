@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 import Link from "next/link";
 import { createSuggestion, getSuggestions, type Suggestion } from "./actions";
+import { SUGGESTION_CATEGORIES, CATEGORY_LABELS, CATEGORY_COLORS } from "@/lib/categories";
 
 function formatDate(iso: string) {
   const d = new Date(iso);
@@ -63,6 +64,23 @@ export default function SuggestionBoxPage() {
         >
           <div className="space-y-4">
             <div>
+              <label htmlFor="category" className="mb-1 block text-sm text-slate-600">
+                カテゴリ
+              </label>
+              <select
+                id="category"
+                name="category"
+                className="w-full rounded-lg border border-slate-300 px-3 py-2 text-slate-800 focus:border-slate-500 focus:outline-none focus:ring-1 focus:ring-slate-500"
+                disabled={submitting}
+              >
+                {SUGGESTION_CATEGORIES.map((id) => (
+                  <option key={id} value={id}>
+                    {CATEGORY_LABELS[id]}
+                  </option>
+                ))}
+              </select>
+            </div>
+            <div>
               <label htmlFor="content" className="mb-1 block text-sm text-slate-600">
                 ご意見・ご提案
               </label>
@@ -118,6 +136,17 @@ export default function SuggestionBoxPage() {
                 key={s.id}
                 className="rounded-xl border border-slate-200 bg-white p-5 shadow-sm transition-shadow hover:shadow-md"
               >
+                <div className="mb-2 flex flex-wrap items-center gap-2">
+                  {s.category && (
+                    <span
+                      className={`rounded px-2 py-0.5 text-xs font-medium ${
+                        CATEGORY_COLORS[s.category as keyof typeof CATEGORY_COLORS] ?? "bg-slate-100 text-slate-700"
+                      }`}
+                    >
+                      {CATEGORY_LABELS[s.category as keyof typeof CATEGORY_LABELS] ?? s.category}
+                    </span>
+                  )}
+                </div>
                 <p className="whitespace-pre-wrap text-slate-800">{s.content}</p>
                 <div className="mt-3 flex items-center gap-2 text-sm text-slate-500">
                   <span>{s.author_name || "匿名"}</span>
