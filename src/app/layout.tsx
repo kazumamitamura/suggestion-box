@@ -5,8 +5,8 @@ import "./globals.css";
 const notoSansJP = Noto_Sans_JP({ subsets: ["latin"], weight: ["400", "500", "700"] });
 
 export const metadata: Metadata = {
-  title: "目安箱",
-  description: "社内提案ポスト",
+  title: "Future Lab | 教員向け提案プラットフォーム",
+  description: "教員向けの未来志向な提案プラットフォーム",
 };
 
 export default function RootLayout({
