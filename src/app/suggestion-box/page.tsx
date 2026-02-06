@@ -122,12 +122,15 @@ export default function SuggestionBoxPage() {
       </section>
 
       <section>
-        <h2 className="mb-4 text-base font-medium text-slate-700">意見一覧</h2>
+        <h2 className="mb-4 text-base font-medium text-slate-700">自分の投稿一覧</h2>
+        <p className="mb-3 text-sm text-slate-500">
+          この端末から投稿した内容だけが表示されます。管理者は全員の投稿を確認できます。
+        </p>
         {loading ? (
           <p className="text-slate-500">読み込み中…</p>
         ) : suggestions.length === 0 ? (
           <p className="rounded-xl border border-slate-200 bg-white p-8 text-center text-slate-500">
-            まだ投稿はありません。最初のご意見をお寄せください。
+            まだ投稿はありません。上のフォームからご意見をお送りください。
           </p>
         ) : (
           <ul className="space-y-4">

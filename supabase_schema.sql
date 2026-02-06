@@ -7,12 +7,14 @@ CREATE TABLE IF NOT EXISTS suggestions (
   admin_response TEXT,
   admin_responded_at TIMESTAMPTZ,
   category VARCHAR(50) DEFAULT 'other',
+  poster_id UUID,
   created_at TIMESTAMPTZ DEFAULT NOW()
 );
 
 -- 既存テーブルへのカラム追加（マイグレーション用）
 ALTER TABLE suggestions ADD COLUMN IF NOT EXISTS status VARCHAR(20) DEFAULT 'open';
 ALTER TABLE suggestions ADD COLUMN IF NOT EXISTS category VARCHAR(50) DEFAULT 'other';
+ALTER TABLE suggestions ADD COLUMN IF NOT EXISTS poster_id UUID;
 ALTER TABLE suggestions ADD COLUMN IF NOT EXISTS admin_response TEXT;
 ALTER TABLE suggestions ADD COLUMN IF NOT EXISTS admin_responded_at TIMESTAMPTZ;
 

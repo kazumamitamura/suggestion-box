@@ -8,6 +8,7 @@ import {
   clearAdminSession,
   isAdminSession,
 } from "@/lib/admin";
+import { getPosterId } from "@/lib/posterSession";
 import { revalidatePath } from "next/cache";
 
 export type Suggestion = {
@@ -33,11 +34,13 @@ export async function createSuggestion(formData: FormData) {
   }
 
   try {
+    const posterId = await getPosterId();
     const supabase = createServerClient();
     const { error } = await supabase.from("suggestions").insert({
       content: content.trim(),
       author_name: authorName?.trim() || null,
       category: category || "other",
+      poster_id: posterId,
     });
 
     if (error) throw error;
@@ -50,12 +53,15 @@ export async function createSuggestion(formData: FormData) {
   }
 }
 
+/** 投稿者用：自分の投稿のみ取得（poster_id で絞り込み） */
 export async function getSuggestions(): Promise<Suggestion[]> {
   try {
+    const posterId = await getPosterId();
     const supabase = createServerClient();
     const { data, error } = await supabase
       .from("suggestions")
       .select("id, content, author_name, category, status, admin_response, admin_responded_at, created_at")
+      .eq("poster_id", posterId)
       .order("created_at", { ascending: false });
 
     if (error) throw error;
